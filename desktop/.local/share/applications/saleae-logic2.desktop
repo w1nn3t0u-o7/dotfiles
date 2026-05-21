@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Logic
+Exec=saleae-logic2 --no-sandbox
+Terminal=false
+Type=Application
+Icon=Logic
+StartupWMClass=Logic
+Comment=Debug hardware like a pro
+Categories=Utility

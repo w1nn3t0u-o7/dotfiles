@@ -1,0 +1,28 @@
+[user]
+    name = Mikolaj Zielniok
+    email = mik.ziel7890@gmail.com
+
+[core]
+    whitespace = error
+    preloadindex = true
+
+[url "git@github.com:w1nn3t0u-o7/"]
+    insteadOf = "wn:"
+
+[url "git@github.com:"]
+    insteadOf = "gh:"
+
+[init]
+    defaultBranch = main
+
+[status]
+    branch = true
+    showStash = true
+
+[push]
+    autoSetupRemote = true
+    default = current
+    followTags = true
+
+[pull]
+    default = current
