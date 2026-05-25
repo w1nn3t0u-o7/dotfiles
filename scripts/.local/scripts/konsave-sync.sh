@@ -7,7 +7,7 @@
 set -euo pipefail
 
 PROFILE="${1:-plasma}"
-EXPORT_DIR="$HOME"
+EXPORT_DIR="$HOME/Projects/dotfiles/konsave/"
 EXPORT_NAME="$PROFILE"
 
 echo "==> Saving current Plasma config into konsave profile: '$PROFILE'"
@@ -20,7 +20,3 @@ konsave --export-profile "$PROFILE" \
     --force
 
 echo "==> Done! File: ${EXPORT_DIR}/${EXPORT_NAME}.knsv"
-
-git --git-dir="$HOME/.dotfiles/" --work-tree="$HOME" add "${EXPORT_DIR}/${EXPORT_NAME}.knsv"
-git --git-dir="$HOME/.dotfiles/" --work-tree="$HOME" commit -m "chore: update plasma konsave snapshot"
-git --git-dir="$HOME/.dotfiles/" --work-tree="$HOME" push
