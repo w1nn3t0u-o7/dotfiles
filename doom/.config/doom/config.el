@@ -130,15 +130,9 @@
            "* TODO Read: %^{Title}\n:PROPERTIES:\n:CREATED: %U\n:URL: %^{URL (optional)}\n:END:\n%?"
            :empty-lines 1)
 
-          ;; Uni assignment / problem
-          ("u" "Uni task" entry
-           (file+headline "~/Projects/org/projects.org" "University")
-           "* TODO %^{Assignment}\n  DEADLINE: %^{Deadline}t\n:PROPERTIES:\n:COURSE: %^{Course}\n:CREATED: %U\n:END:\n%?"
-           :empty-lines 1)
-
           ;; New project
           ("p" "Project" entry
-           (file+headline "~/Projects/org/projects.org" "Active")
+           (file "~/Projects/org/projects.org")
            "** %^{Project name} [/]\n:PROPERTIES:\n:GOAL: %^{Goal}\n:CREATED: %U\n:END:\n\n*** Tasks\n\n*** Notes\n%?"
            :empty-lines 1)
 
@@ -188,7 +182,17 @@
   ;; Visual tweaks
   (setq org-startup-indented t)
   (setq org-hide-leading-stars t)
-  (setq org-startup-folded 'overview))
+  (setq org-startup-folded 'overview)
+
+  (defun my/org-refresh-font-lock ()
+    (dolist (buf (buffer-list))
+      (with-current-buffer buf
+        (when (derived-mode-p 'org-mode)
+          (font-lock-ensure)))))
+
+  (add-hook 'emacs-startup-hook
+            (lambda ()
+              (run-with-idle-timer 1 nil #'my/org-refresh-font-lock))))
 
 ;; Org Roam capture templates
 (after! org-roam
@@ -240,8 +244,7 @@
           ;; ("uni-calendar-id@group.calendar.google.com" . "~/Projects/org/calendar.org")
           ))
 
-  ;; Auto-fetch when opening agenda
-  (add-hook 'org-agenda-mode-hook #'org-gcal-fetch)
+  (run-with-idle-timer 300 t #'org-gcal-fetch)
 
   ;; Auto-push when finishing a capture (new events go to Google Calendar)
   (add-hook 'org-capture-after-finalize-hook #'org-gcal-fetch)
