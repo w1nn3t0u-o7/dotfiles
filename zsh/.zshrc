@@ -60,14 +60,6 @@ zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
 alias ls='eza -l --icons'
 alias vim='nvim'
 
-# Aliases: tmux
-alias tn='tmux new-session -s'
-alias tl='tmux list-sessions'
-alias ta='tmux attach-session'
-
-# Tmux-sessionizer binds
-bindkey -s ^f "tmux-sessionizer\n"
-
 # Shell integrations
 eval "$(fzf --zsh)"
 eval "$(zoxide init --cmd cd zsh)"
@@ -100,7 +92,7 @@ addToPathFront $HOME/.local/scripts
 addToPathFront $HOME/.config/emacs/bin
 
 # Global variables
-export EDITOR=nvim
+export EDITOR=emacs
 
 # Created by `pipx` on 2026-05-16 13:17:36
 export PATH="$PATH:/home/w1nn3t0u/.local/bin"

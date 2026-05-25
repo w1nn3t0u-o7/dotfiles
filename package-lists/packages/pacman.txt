@@ -15,7 +15,6 @@ bluez-utils
 breeze-gtk
 breeze-plymouth
 broadcom-wl-dkms
-btop
 btrfs-progs
 cantarell-fonts
 ccache
@@ -100,7 +99,6 @@ kwallet-pam
 kwin-x11
 kwrited
 languagetool
-lazygit
 less
 libdvdcss
 libgsf
@@ -226,7 +224,6 @@ texlive-plaingeneric
 timeshift
 tk
 tldr
-tmux
 tree
 ttf-bitstream-vera
 ttf-dejavu
@@ -269,7 +266,5 @@ xorg-xrandr
 xterm
 yarn
 yazi
-zathura
-zathura-pdf-mupdf
 zoxide
 zsh
