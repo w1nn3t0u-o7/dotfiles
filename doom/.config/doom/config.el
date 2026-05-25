@@ -45,9 +45,8 @@
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/org/")
-(setq org-roam-directory "~/org/notes/")
-(setq org-agenda-files '("~/org/inbox.org" "~/org/projects.org"))
+(setq org-directory "~/Projects/org/")
+(setq org-roam-directory "~/Projects/org/notes/")
 
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
 ;; `with-eval-after-load' block, otherwise Doom's defaults may override your
@@ -84,33 +83,111 @@
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
 
 (after! org
-    ;; Org capture templates for inbox.org and projects.org
-    (setq org-capture-templates
-        '(("i" "Idea" entry
-            (file "~/org/inbox.org")
-            "* %?\n:PROPERTIES:\n:CREATED: %U\n:END:\n"
-            :empty-lines 1)
+  ;; TODO states
+  (setq org-todo-keywords
+        '((sequence "TODO(t)" "NEXT(n)" "WAITING(w@/!)" "SOMEDAY(s)"
+           "|" "DONE(d!)" "CANCELLED(c@)")))
 
-            ("t" "Task" entry
-            (file "~/org/inbox.org")
-            "* TODO %?\n:PROPERTIES:\n:CREATED: %U\n:END:\n"
-            :empty-lines 1)
+  (setq org-todo-keyword-faces
+        '(("TODO"      . (:foreground "#ed8796" :weight bold))
+          ("NEXT"      . (:foreground "#8aadf4" :weight bold))
+          ("WAITING"   . (:foreground "#f5a97f" :weight bold))
+          ("SOMEDAY"   . (:foreground "#a5adcb"))
+          ("DONE"      . (:foreground "#a6da95"))
+          ("CANCELLED" . (:foreground "#6e738d" :strike-through t))))
 
-            ("p" "Project" entry
-            (file+headline "~/org/projects.org" "Active")
-            "** %^{Project name} [%]\n:PROPERTIES:\n:GOAL: %^{Goal}\n:CREATED: %U\n:END:\n\n*** Notes\n%?"
-            :empty-lines 1)))
+  ;; Agenda files
+  (setq org-agenda-files
+        '("~/Projects/org/inbox.org"
+          "~/Projects/org/projects.org"
+          "~/Projects/org/calendar.org"
+          "~/Projects/org/references.org"))
 
-    ;; Set max level for refiling headings
-    (setq org-refile-targets
-        '(("~/org/projects.org" :maxlevel . 2)
-            ("~/org/inbox.org" :maxlevel . 1)))
+  ;; Capture templates
+  (setq org-capture-templates
+        '(;; Quick inbox capture
+          ("i" "Inbox" entry
+           (file "~/Projects/org/inbox.org")
+           "* %?\n:PROPERTIES:\n:CREATED: %U\n:END:\n"
+           :empty-lines 1)
 
-    ;; Show the full path in refile prompt (file/heading/subheading)
-    (setq org-refile-use-outline-path 'file)
+          ;; Task with link to current buffer/file
+          ("t" "Task (linked)" entry
+           (file "~/Projects/org/inbox.org")
+           "* TODO %?\n:PROPERTIES:\n:CREATED: %U\n:LINK: %a\n:END:\n"
+           :empty-lines 1)
 
-    ;; Allow completing each path step separately (easier navigation)
-    (setq org-outline-path-complete-in-steps nil))
+          ;; Calendar event / appointment
+          ("c" "Calendar event" entry
+           (file "~/Projects/org/calendar.org")
+           "* %^{Event}\n%^{SCHEDULED}t\n:PROPERTIES:\n:CREATED: %U\n:END:\n%?"
+           :empty-lines 1)
+
+          ;; Reference / reading item
+          ("r" "Reference to read" entry
+           (file "~/Projects/org/references.org")
+           "* TODO Read: %^{Title}\n:PROPERTIES:\n:CREATED: %U\n:URL: %^{URL (optional)}\n:END:\n%?"
+           :empty-lines 1)
+
+          ;; Uni assignment / problem
+          ("u" "Uni task" entry
+           (file+headline "~/Projects/org/projects.org" "University")
+           "* TODO %^{Assignment}\n  DEADLINE: %^{Deadline}t\n:PROPERTIES:\n:COURSE: %^{Course}\n:CREATED: %U\n:END:\n%?"
+           :empty-lines 1)
+
+          ;; New project
+          ("p" "Project" entry
+           (file+headline "~/Projects/org/projects.org" "Active")
+           "** %^{Project name} [/]\n:PROPERTIES:\n:GOAL: %^{Goal}\n:CREATED: %U\n:END:\n\n*** Tasks\n\n*** Notes\n%?"
+           :empty-lines 1)
+
+          ;; Email to follow up (works from mu4e!)
+          ("e" "Email follow-up" entry
+           (file "~/Projects/org/inbox.org")
+           "* TODO Follow up: %a\n:PROPERTIES:\n:CREATED: %U\n:END:\n%?"
+           :empty-lines 1)))
+
+  ;; Refile targets
+  (setq org-refile-targets
+        '(("~/Projects/org/projects.org"   :maxlevel . 3)
+          ("~/Projects/org/someday.org"    :maxlevel . 1)
+          ("~/Projects/org/references.org" :maxlevel . 1)
+          ("~/Projects/org/calendar.org"   :maxlevel . 1)
+          (nil                             :maxlevel . 2))) ; current buffer
+
+  (setq org-refile-use-outline-path 'file)
+  (setq org-outline-path-complete-in-steps nil)
+  (setq org-refile-allow-creating-parent-nodes 'confirm)
+
+  ;; Agenda custom views
+  (setq org-agenda-custom-commands
+        '(("d" "Daily Dashboard"
+           ((agenda "" ((org-agenda-span 1)
+                        (org-agenda-start-with-log-mode t)))
+            (todo "NEXT"
+                  ((org-agenda-overriding-header "Next Actions")))
+            (todo "WAITING"
+                  ((org-agenda-overriding-header "Waiting For")))
+            (tags-todo "+inbox"
+                       ((org-agenda-overriding-header "Inbox (to refile)")))))
+
+          ("w" "Weekly Review"
+           ((agenda "" ((org-agenda-span 7)))
+            (todo "TODO|NEXT"
+                  ((org-agenda-overriding-header "All open tasks")))
+            (todo "SOMEDAY"
+                  ((org-agenda-overriding-header "Someday/Maybe")))))))
+
+  ;; Logging & clocking
+  (setq org-log-done 'time)
+  (setq org-log-into-drawer t)
+  (setq org-clock-persist 'history)
+  (org-clock-persistence-insinuate)
+
+  ;; Visual tweaks
+  (setq org-startup-indented t)
+  (setq org-hide-leading-stars t)
+  (setq org-startup-folded 'overview))
 
 ;; Org Roam capture templates
 (after! org-roam
@@ -119,22 +196,53 @@
            "* %?\n\n* Links\n\n"
            :target (file+head "${slug}.org"
                               ":PROPERTIES:\n:ROAM_ALIASES: %^{Aliases (optional)}\n:END:\n#+title: ${title}\n#+filetags: :knowledge:\n#+date: %U\n\n")
-           :unnarrowed t)
-
-          ("b" "Book" plain
-           "#+author: %^{Author}\n#+year: %^{Year}\n\n* Summary\n%?\n\n* Key Ideas\n\n* Quotes\n\n* Links\n\n"
-           :target (file+head "${slug}.org"
-                              ":PROPERTIES:\n:ROAM_ALIASES: %^{Aliases (optional)}\n:END:\n#+title: ${title}\n#+filetags: :knowledge:\n#+date: %U\n\n")
-           :unnarrowed t)
-
-          ("p" "Paper / Article" plain
-           "#+author: %^{Author}\n#+url: %^{URL or DOI}\n\n* Summary\n%?\n\n* Key Points\n\n* My Thoughts\n\n* Links\n\n"
-           :target (file+head "${slug}.org"
-                              "#+title: ${title}\n#+filetags: :source: :paper:\n#+date: %U\n")
-           :unnarrowed t)
-
-          ("a" "Assignment / Exam" plain
-           "#+course: %^{Course code}\n#+due: %^{Due date}\n\n* Requirements\n%?\n\n* Notes\n\n* Resources\n\n"
-           :target (file+head "${slug}.org"
-                              "#+title: ${title}\n#+filetags: :source: :uni:\n#+date: %U\n")
            :unnarrowed t))))
+
+;; Email integration
+(after! mu4e
+  (setq mu4e-maildir "~/.mail"
+        mu4e-get-mail-command "mbsync -a"   ; or offlineimap
+        mu4e-update-interval 300            ; fetch every 5 min
+        mu4e-compose-reply-to-address "your@email.com"
+        user-mail-address "your@email.com"
+        user-full-name "Your Name"
+
+        ;; Gmail-style folder mapping (adjust for your provider)
+        mu4e-sent-folder   "/gmail/[Gmail]/Sent Mail"
+        mu4e-drafts-folder "/gmail/[Gmail]/Drafts"
+        mu4e-trash-folder  "/gmail/[Gmail]/Trash"
+        mu4e-refile-folder "/gmail/[Gmail]/All Mail"
+
+        ;; Show related messages in a thread
+        mu4e-headers-include-related t
+        mu4e-headers-skip-duplicates t
+
+        ;; When reading a message, capture a follow-up with 'C'
+        ;; The "e" capture template above handles this
+        mu4e-org-link-query-in-headers-mode t)
+
+  ;; Quick actions from mu4e headers/view with 'C'
+  (add-to-list 'mu4e-headers-actions
+               '("capture as task" . mu4e-action-capture-message) t)
+  (add-to-list 'mu4e-view-actions
+               '("capture as task" . mu4e-action-capture-message) t))
+
+;; Google calendar integration
+(load! "private/org-gcal-credentials" doom-user-dir t)
+
+(after! org-gcal
+  (setq org-gcal-file-alist
+        ;; Map each calendar ID to an org file
+        '(("mik.ziel7890@gmail.com"  . "~/Projects/org/calendar.org")
+          ;; Add more calendars if you have them, e.g. uni calendar:
+          ;; ("uni-calendar-id@group.calendar.google.com" . "~/Projects/org/calendar.org")
+          ))
+
+  ;; Auto-fetch when opening agenda
+  (add-hook 'org-agenda-mode-hook #'org-gcal-fetch)
+
+  ;; Auto-push when finishing a capture (new events go to Google Calendar)
+  (add-hook 'org-capture-after-finalize-hook #'org-gcal-fetch)
+
+  ;; Don't clutter the echo area with sync messages
+  (setq org-gcal-notify-p nil))
