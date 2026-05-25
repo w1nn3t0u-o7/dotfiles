@@ -101,6 +101,7 @@
         '("~/Projects/org/inbox.org"
           "~/Projects/org/projects.org"
           "~/Projects/org/calendar.org"
+          "~/Projects/org/uni-calendar.org"
           "~/Projects/org/references.org"))
 
   ;; Capture templates
@@ -233,7 +234,8 @@
 (after! org-gcal
   (setq org-gcal-file-alist
         ;; Map each calendar ID to an org file
-        '(("mik.ziel7890@gmail.com"  . "~/Projects/org/calendar.org")
+        '(("mik.ziel7890@gmail.com" . "~/Projects/org/calendar.org")
+          ("vr3ce5av1df5uj8et32gdoobuhrgv5eq@import.calendar.google.com" . "~/Projects/org/uni-calendar.org")
           ;; Add more calendars if you have them, e.g. uni calendar:
           ;; ("uni-calendar-id@group.calendar.google.com" . "~/Projects/org/calendar.org")
           ))
