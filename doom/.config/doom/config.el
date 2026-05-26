@@ -133,7 +133,7 @@
           ;; New project
           ("p" "Project" entry
            (file "~/Projects/org/projects.org")
-           "** %^{Project name} [/]\n:PROPERTIES:\n:GOAL: %^{Goal}\n:CREATED: %U\n:END:\n\n*** Tasks\n\n*** Notes\n%?"
+           "** %^{Project name}\n:PROPERTIES:\n:GOAL: %^{Goal}\n:CREATED: %U\n:END:\n\n*** Tasks [/]\n\n*** Notes\n%?"
            :empty-lines 1)
 
           ;; Email to follow up (works from mu4e!)
@@ -156,22 +156,23 @@
 
   ;; Agenda custom views
   (setq org-agenda-custom-commands
-        '(("d" "Daily Dashboard"
-           ((agenda "" ((org-agenda-span 1)
-                        (org-agenda-start-with-log-mode t)))
+        '(("a" "Agenda + tasks"
+           ((agenda "" ((org-agenda-span 3)
+                        (org-agenda-start-day "+0d")))
             (todo "NEXT"
-                  ((org-agenda-overriding-header "Next Actions")))
+                  ((org-agenda-overriding-header "Next Actions")
+                   (org-agenda-prefix-format "  %i %-12:c%?-12t% s")))
             (todo "WAITING"
-                  ((org-agenda-overriding-header "Waiting For")))
+                  ((org-agenda-overriding-header "Waiting For")
+                   (org-agenda-prefix-format "  %i %-12:c%?-12t% s")))
+            (todo "TODO"
+                  ((org-agenda-overriding-header "Todo Items")
+                   (org-agenda-prefix-format "  %i %-12:c%?-12t% s")
+                   (org-agenda-skip-function
+                    '(org-agenda-skip-entry-if 'tag "inbox"))))
             (tags-todo "+inbox"
-                       ((org-agenda-overriding-header "Inbox (to refile)")))))
-
-          ("w" "Weekly Review"
-           ((agenda "" ((org-agenda-span 7)))
-            (todo "TODO|NEXT"
-                  ((org-agenda-overriding-header "All open tasks")))
-            (todo "SOMEDAY"
-                  ((org-agenda-overriding-header "Someday/Maybe")))))))
+                       ((org-agenda-overriding-header "Inbox (to refile)")
+                        (org-agenda-prefix-format "  %i %-12:c%?-12t% s")))))))
 
   ;; Logging & clocking
   (setq org-log-done 'time)
