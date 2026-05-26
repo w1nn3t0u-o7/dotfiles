@@ -7,7 +7,6 @@ jbig2enc-git
 mu
 ocrmypdf
 paru
-paru-debug
 python312
 realesrgan-ncnn-vulkan-bin
 saleae-logic2
