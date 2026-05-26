@@ -161,18 +161,19 @@
                         (org-agenda-start-day "+0d")))
             (todo "NEXT"
                   ((org-agenda-overriding-header "Next Actions")
-                   (org-agenda-prefix-format "  %i %-12:c%?-12t% s")))
+                   (org-agenda-skip-function
+                    '(org-agenda-skip-entry-if 'file "~/Projects/org/inbox.org"))))
             (todo "WAITING"
                   ((org-agenda-overriding-header "Waiting For")
-                   (org-agenda-prefix-format "  %i %-12:c%?-12t% s")))
+                   (org-agenda-skip-function
+                    '(org-agenda-skip-entry-if 'file "~/Projects/org/inbox.org"))))
             (todo "TODO"
                   ((org-agenda-overriding-header "Todo Items")
-                   (org-agenda-prefix-format "  %i %-12:c%?-12t% s")
                    (org-agenda-skip-function
-                    '(org-agenda-skip-entry-if 'tag "inbox"))))
-            (tags-todo "+inbox"
-                       ((org-agenda-overriding-header "Inbox (to refile)")
-                        (org-agenda-prefix-format "  %i %-12:c%?-12t% s")))))))
+                    '(org-agenda-skip-entry-if 'file "~/Projects/org/inbox.org"))))
+            (tags "inbox"
+                  ((org-agenda-files '("~/Projects/org/inbox.org"))
+                   (org-agenda-overriding-header "Inbox (all entries)")))))))
 
   ;; Logging & clocking
   (setq org-log-done 'time)
