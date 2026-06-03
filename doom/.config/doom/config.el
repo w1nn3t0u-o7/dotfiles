@@ -82,6 +82,9 @@
 ;; Force Emacs to start in maximized window
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
 
+;; Search path for Projectile
+(setq projectile-project-search-path '("~/Projects"))
+
 (after! org
   ;; TODO states
   (setq org-todo-keywords
