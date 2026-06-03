@@ -4,6 +4,7 @@ alsa-firmware
 alsa-plugins
 alsa-utils
 aspell
+audacity
 b43-fwcutter
 base
 base-devel
@@ -208,6 +209,7 @@ sof-firmware
 spectacle
 spotify-launcher
 starship
+steam
 stow
 sudo
 syncthing

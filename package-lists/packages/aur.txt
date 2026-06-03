@@ -4,7 +4,9 @@ displaylink
 downgrade
 evdi-dkms
 jbig2enc-git
+lib32-nvidia-580xx-utils
 mu
+nvidia-580xx-dkms
 ocrmypdf
 paru
 python312
