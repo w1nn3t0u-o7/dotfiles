@@ -3,6 +3,7 @@ accountsservice
 alsa-firmware
 alsa-plugins
 alsa-utils
+ark
 aspell
 audacity
 b43-fwcutter
@@ -33,6 +34,7 @@ dmidecode
 dmraid
 dnsmasq
 docker
+dolphin
 dosfstools
 dracut
 drkonqi
@@ -67,6 +69,7 @@ gst-libav
 gst-plugin-pipewire
 gst-plugins-bad
 gst-plugins-ugly
+gwenview
 haveged
 hdparm
 hugo
@@ -86,6 +89,7 @@ isync
 iwd
 jfsutils
 jq
+kdeconnect
 kde-gtk-config
 kdeplasma-addons
 keyd
