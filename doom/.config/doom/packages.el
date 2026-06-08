@@ -54,4 +54,3 @@
 ;; (unpin! t)
 
 (package! catppuccin-theme)
-(package! org-gcal)

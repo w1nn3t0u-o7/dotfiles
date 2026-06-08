@@ -104,8 +104,8 @@
         '("~/Projects/org/inbox.org"
           "~/Projects/org/projects.org"
           "~/Projects/org/calendar.org"
-          "~/Projects/org/uni-calendar.org"
-          "~/Projects/org/references.org"))
+          "~/Projects/org/uni.org"
+          "~/Projects/org/tasks.org"))
 
   ;; Capture templates
   (setq org-capture-templates
@@ -116,7 +116,7 @@
            :empty-lines 1)
 
           ;; Task with link to current buffer/file
-          ("t" "Task (linked)" entry
+          ("t" "Task (linked" entry
            (file "~/Projects/org/inbox.org")
            "* TODO %?\n:PROPERTIES:\n:CREATED: %U\n:LINK: %a\n:END:\n"
            :empty-lines 1)
@@ -124,33 +124,22 @@
           ;; Calendar event / appointment
           ("c" "Calendar event" entry
            (file "~/Projects/org/calendar.org")
-           "* %^{Event}\n%^{SCHEDULED}t\n:PROPERTIES:\n:CREATED: %U\n:END:\n%?"
-           :empty-lines 1)
-
-          ;; Reference / reading item
-          ("r" "Reference to read" entry
-           (file "~/Projects/org/references.org")
-           "* TODO Read: %^{Title}\n:PROPERTIES:\n:CREATED: %U\n:URL: %^{URL (optional)}\n:END:\n%?"
-           :empty-lines 1)
+           "* %?\n:PROPERTIES:\n:calendar-id:\tmik.ziel7890@gmail.com\n:END:\n:org-gcal:\n%^T--%^T\n:END:\n\n"
+           :empty-lines 1
+           :jump-to-captured t)
 
           ;; New project
           ("p" "Project" entry
            (file "~/Projects/org/projects.org")
            "** %^{Project name}\n:PROPERTIES:\n:GOAL: %^{Goal}\n:CREATED: %U\n:END:\n\n*** Tasks [/]\n\n*** Notes\n%?"
-           :empty-lines 1)
-
-          ;; Email to follow up (works from mu4e!)
-          ("e" "Email follow-up" entry
-           (file "~/Projects/org/inbox.org")
-           "* TODO Follow up: %a\n:PROPERTIES:\n:CREATED: %U\n:END:\n%?"
            :empty-lines 1)))
 
   ;; Refile targets
   (setq org-refile-targets
         '(("~/Projects/org/projects.org"   :maxlevel . 3)
-          ("~/Projects/org/someday.org"    :maxlevel . 1)
-          ("~/Projects/org/references.org" :maxlevel . 1)
           ("~/Projects/org/calendar.org"   :maxlevel . 1)
+          ("~/Projects/org/tasks.org"      :maxlevel . 2)
+          ("~/Projects/org/uni.org"        :maxlevel . 3)
           (nil                             :maxlevel . 2))) ; current buffer
 
   (setq org-refile-use-outline-path 'file)
@@ -159,45 +148,20 @@
 
   ;; Agenda custom views
   (setq org-agenda-custom-commands
-        '(("a" "Agenda + tasks"
+        '(("a" "Main Dashboard"
            ((agenda "" ((org-agenda-span 3)
+                        (org-deadline-warning-days 7)
+                        (org-agenda-start-with-log-mode t)
                         (org-agenda-start-day "+0d")))
             (todo "NEXT"
-                  ((org-agenda-overriding-header "Next Actions")
-                   (org-agenda-skip-function
-                    '(org-agenda-skip-entry-if 'file "~/Projects/org/inbox.org"))))
+                  ((org-agenda-overriding-header "Next Tasks")))
             (todo "WAITING"
-                  ((org-agenda-overriding-header "Waiting For")
-                   (org-agenda-skip-function
-                    '(org-agenda-skip-entry-if 'file "~/Projects/org/inbox.org"))))
-            (todo "TODO"
-                  ((org-agenda-overriding-header "Todo Items")
-                   (org-agenda-skip-function
-                    '(org-agenda-skip-entry-if 'file "~/Projects/org/inbox.org"))))
-            (tags "inbox"
-                  ((org-agenda-files '("~/Projects/org/inbox.org"))
-                   (org-agenda-overriding-header "Inbox (all entries)")))))))
-
-  ;; Logging & clocking
-  (setq org-log-done 'time)
-  (setq org-log-into-drawer t)
-  (setq org-clock-persist 'history)
-  (org-clock-persistence-insinuate)
+                  ((org-agenda-overriding-header "Waiting")))))))
 
   ;; Visual tweaks
   (setq org-startup-indented t)
   (setq org-hide-leading-stars t)
-  (setq org-startup-folded 'overview)
-
-  (defun my/org-refresh-font-lock ()
-    (dolist (buf (buffer-list))
-      (with-current-buffer buf
-        (when (derived-mode-p 'org-mode)
-          (font-lock-ensure)))))
-
-  (add-hook 'emacs-startup-hook
-            (lambda ()
-              (run-with-idle-timer 1 nil #'my/org-refresh-font-lock))))
+  (setq org-startup-folded 'overview))
 
 ;; Org Roam capture templates
 (after! org-roam
