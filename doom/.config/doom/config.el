@@ -208,15 +208,10 @@
   (setq org-gcal-file-alist
         ;; Map each calendar ID to an org file
         '(("mik.ziel7890@gmail.com" . "~/Projects/org/calendar.org")
-          ("vr3ce5av1df5uj8et32gdoobuhrgv5eq@import.calendar.google.com" . "~/Projects/org/uni-calendar.org")
+          ("vr3ce5av1df5uj8et32gdoobuhrgv5eq@import.calendar.google.com" . "~/Projects/org/uni.org")
+          ("73b7c6e8f32a5f4515186d17e7cf8a0ef1585896599b86b229e0b81ca6dca24d@group.calendar.google.com" . "~/Projects/org/projects.org")
+          ("a3cba964df8556d8fb9626f91b0ebeb32fd76d1376c298d164626c55dd8d92bb@group.calendar.google.com" . "~/Projects/org/uni.org")
+          ("31078d7ee71b401e10fd9253b1f62e3b52fdb6af587e4d4eb5e16c0cf8af8bfd@group.calendar.google.com" . "~/Projects/org/tasks.org")
           ;; Add more calendars if you have them, e.g. uni calendar:
           ;; ("uni-calendar-id@group.calendar.google.com" . "~/Projects/org/calendar.org")
-          ))
-
-  (run-with-idle-timer 300 t #'org-gcal-fetch)
-
-  ;; Auto-push when finishing a capture (new events go to Google Calendar)
-  (add-hook 'org-capture-after-finalize-hook #'org-gcal-fetch)
-
-  ;; Don't clutter the echo area with sync messages
-  (setq org-gcal-notify-p nil))
+          )))
