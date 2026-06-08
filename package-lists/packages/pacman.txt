@@ -55,6 +55,7 @@ ffmpegthumbnailer
 firefox
 firewalld
 flatpak-kcm
+gamescope
 ghostty
 gimp
 git

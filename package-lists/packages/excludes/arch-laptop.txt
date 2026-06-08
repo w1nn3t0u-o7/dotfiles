@@ -1,3 +1,4 @@
 steam
 nvidia-580xx-dkms
 lib32-nvidia-580xx-utils
+gamescope
