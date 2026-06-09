@@ -214,4 +214,10 @@
           ("31078d7ee71b401e10fd9253b1f62e3b52fdb6af587e4d4eb5e16c0cf8af8bfd@group.calendar.google.com" . "~/Projects/org/tasks.org")
           ;; Add more calendars if you have them, e.g. uni calendar:
           ;; ("uni-calendar-id@group.calendar.google.com" . "~/Projects/org/calendar.org")
-          )))
+          ))
+
+  (map! :map org-mode-map
+        :localleader
+        :desc "Org-gcal sync"       "G s" #'org-gcal-sync
+        :desc "Org-gcal fetch"      "G f" #'org-gcal-fetch
+        :desc "Org-gcal post point" "G p" #'org-gcal-post-at-point))
