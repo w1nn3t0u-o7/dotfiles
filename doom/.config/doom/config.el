@@ -204,6 +204,14 @@
 ;; Google calendar integration
 (load! "private/org-gcal-credentials" doom-user-dir t)
 
+;; (setq epg-pinentry-mode 'loopback)
+
+(require 'plstore)
+
+(defconst my/org-gcal-gpg-key "1240EFCC8C3F4169FD2C5FD06552193223994A93")
+
+(add-to-list 'plstore-encrypt-to my/org-gcal-gpg-key)
+
 (after! org-gcal
   (setq org-gcal-file-alist
         ;; Map each calendar ID to an org file
@@ -214,10 +222,12 @@
           ("31078d7ee71b401e10fd9253b1f62e3b52fdb6af587e4d4eb5e16c0cf8af8bfd@group.calendar.google.com" . "~/Projects/org/tasks.org")
           ;; Add more calendars if you have them, e.g. uni calendar:
           ;; ("uni-calendar-id@group.calendar.google.com" . "~/Projects/org/calendar.org")
-          ))
+          )))
 
-  (map! :map org-mode-map
-        :localleader
-        :desc "Org-gcal sync"       "G s" #'org-gcal-sync
-        :desc "Org-gcal fetch"      "G f" #'org-gcal-fetch
-        :desc "Org-gcal post point" "G p" #'org-gcal-post-at-point))
+(map! :leader
+      :desc "Org-gcal sync"       "G s" #'org-gcal-sync
+      :desc "Org-gcal fetch"      "G f" #'org-gcal-fetch)
+
+(map! :map org-mode-map
+      :localleader
+      :desc "Org-gcal post point" "G p" #'org-gcal-post-at-point)
