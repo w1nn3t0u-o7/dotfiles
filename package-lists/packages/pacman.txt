@@ -101,6 +101,7 @@ kmenuedit
 krdp
 kscreen
 ksshaskpass
+kwalletmanager
 kwallet-pam
 kwin-x11
 kwrited
