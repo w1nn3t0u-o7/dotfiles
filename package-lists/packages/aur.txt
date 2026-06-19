@@ -12,7 +12,7 @@ paru
 python312
 realesrgan-ncnn-vulkan-bin
 saleae-logic2
-sioyek-git
+sioyek
 soundfont-fatboy
 syncthingtray-qt6
 ttf-symbola
